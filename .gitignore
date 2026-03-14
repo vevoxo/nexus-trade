@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log*
+.DS_Store
+.env
+.env.*
+apps/api/.env
+apps/web/.env
+apps/web/.next
+apps/web/out
+apps/api/dist
+coverage
+.npm-cache
