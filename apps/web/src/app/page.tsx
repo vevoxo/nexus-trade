@@ -15,7 +15,7 @@ import ProfilePage from '@/components/ProfilePage'
 import ChatPage from '@/components/ChatPage'
 import { AuthModal } from '@/components/AuthModal'
 import { Toast } from '@/components/Toast'
-import { useAuthStore } from '@/stores/auth-store'
+import { useAuthStore, type UserPayload } from '@/stores/auth-store'
 import { apiClient } from '@/lib/api-client'
 import { useAccountSummary, useOpenPositions, useSymbolsWithSocket, usePriceSocket } from '@/hooks/useMarketData'
 import { useQueryClient } from '@tanstack/react-query'
@@ -110,17 +110,27 @@ export default function TradingPlatform() {
         const tokens = await apiClient.post<{
           accessToken: string
           refreshToken: string
-          user: { userId: string; email: string; role: string }
+          user: UserPayload
         }>('/auth/login', { email: demoEmail, password: demoPassword })
-        setCredentials({ user: tokens.user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken })
+
+        setCredentials({
+          user: tokens.user as UserPayload,
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        })
       } catch {
         try {
           const tokens = await apiClient.post<{
             accessToken: string
             refreshToken: string
-            user: { userId: string; email: string; role: string }
+            user: UserPayload
           }>('/auth/register', { fullName: 'Demo User', email: demoEmail, password: demoPassword })
-          setCredentials({ user: tokens.user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken })
+
+          setCredentials({
+            user: tokens.user as UserPayload,
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+          })
         } catch (error) {
           console.error('Automatic login failed', error)
           setShowAuth(true) // fall back to manual login/signup

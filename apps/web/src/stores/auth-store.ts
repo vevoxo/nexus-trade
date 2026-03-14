@@ -3,10 +3,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type UserPayload = {
+export type UserPayload = {
   userId: string
   email: string
-  role: string
+  role: 'USER' | 'ADMIN'
 }
 
 type AuthState = {

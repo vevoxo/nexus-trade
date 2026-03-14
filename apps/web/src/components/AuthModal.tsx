@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { apiClient } from '@/lib/api-client'
-import { useAuthStore } from '@/stores/auth-store'
+import { useAuthStore, type UserPayload } from '@/stores/auth-store'
 
 type Props = {
   open: boolean
@@ -58,9 +58,9 @@ export function AuthModal({ open, onClose }: Props) {
         const tokens = await apiClient.post<{
           accessToken: string
           refreshToken: string
-          user: { userId: string; email: string; role: string }
+          user: UserPayload
         }>('/auth/login', { email: nextEmail, password: nextPassword })
-        setCredentials({ user: tokens.user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken })
+        setCredentials({ user: tokens.user as UserPayload, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken })
         setStatus('Signed in successfully')
         setTimeout(() => onClose(), 1000)
         return
@@ -69,7 +69,7 @@ export function AuthModal({ open, onClose }: Props) {
       const response = await apiClient.post<{
         accessToken: string
         refreshToken: string
-        user: { userId: string; email: string; role: string }
+        user: UserPayload
         message?: string
       }>('/auth/register', { 
         fullName: nextFullName || 'New Trader', 
@@ -83,7 +83,7 @@ export function AuthModal({ open, onClose }: Props) {
       }
       
       setCredentials({ 
-        user: response.user, 
+        user: response.user as UserPayload, 
         accessToken: response.accessToken, 
         refreshToken: response.refreshToken 
       })
