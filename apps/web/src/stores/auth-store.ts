@@ -6,7 +6,7 @@ import { persist } from 'zustand/middleware'
 type UserPayload = {
   userId: string
   email: string
-  role: 'USER' | 'ADMIN'
+  role: string
 }
 
 type AuthState = {
